@@ -12,7 +12,7 @@
 
 
 using namespace std;
-
+//all the function name is here
 int mainpage();
 int choice1();
 int choice2();
@@ -29,10 +29,11 @@ string removeName();
 int removestd(string path);
 int checkstudent(string path);
 
-string global_file_path;
-string path;
+string global_file_path; // i am storing some path while code running
+string path; // declare to use multiple time
 
 // Check if folder exists
+// this create for check if any of folder is exist or not  
 bool folderExists(const string& folderName) {
     struct stat info;
     if (stat(folderName.c_str(), &info) != 0) {
@@ -52,7 +53,7 @@ int choice1()
  {
     string path;
     int select;
-    cout <<endl<<endl <<"Select Class :" <<endl <<endl;
+   
     DIR* dir;
     struct dirent* ent;
     dir = opendir("./classes");
@@ -68,7 +69,7 @@ int choice1()
         }
         closedir(dir);
     } else {
-       
+       cout<<"\nMaybe you forget to create Class";
         mainpage();
         
     }
