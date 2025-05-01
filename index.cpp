@@ -27,6 +27,7 @@ string choice5();
 string addname();
 string removeName();
 int removestd(string path);
+int recall(string path, int check = 0);
 
 string global_file_path;
 string path;
@@ -51,7 +52,7 @@ int choice1()
  {
     string path;
     int select;
-    cout << "Select Class :" << endl;
+    cout <<endl<<endl <<"Select Class :" <<endl <<endl;
     DIR* dir;
     struct dirent* ent;
     dir = opendir("./classes");
@@ -71,6 +72,8 @@ int choice1()
         mainpage();
         
     }
+
+    cout<<endl<<endl<< "Select Class :  ";
     cin >> select;
     string storef;
     file.close();
@@ -88,7 +91,7 @@ int choice1()
         }
         File2.close();
     } else {
-        cout << "Something went wrong" << endl;
+        cout <<endl <<"Something went wrong" << endl<<endl;
         mainpage();
     }
 
@@ -96,7 +99,7 @@ int choice1()
     if (file_check.good()) {
         file_check.close();
     } else {
-        cout << "Something went wrong" << endl;
+        cout <<endl<< "Something went wrong" <<endl<< endl;
         return 0;
     }
 
@@ -163,7 +166,7 @@ int choice1()
         rename("temp.txt", path.c_str());
         
     }
-    cout<<"Attendance updated successfully!"<<endl;
+    cout<<"\n\nAttendance updated successfully!\n"<<endl;
     mainpage();
     return 0;
 }
@@ -172,7 +175,7 @@ int choice1()
 
 int choice2() {
     string class_name;
-    cout << "Enter Class Name: ";
+    cout << "\n\nEnter Class Name: ";
     cin.ignore(); 
     getline(cin, class_name);
     
@@ -209,9 +212,9 @@ int choice2() {
         }
     } 
     else{
-        cout << "Class already exists!" << endl;
+        cout << "\n\nClass already exists!" << endl;
         autocreatefile(class_name);
-        cout<<"Press Y for go to Main Screen"<<endl;
+        cout<<"\n\nPress Y for go to Main Screen"<<endl;
         choice2();
 
        }
@@ -222,6 +225,7 @@ string choice3()
 {
     string path;
     int select;
+    cout<<"\n\n";
 
     // Step 1: List all folders inside ./classes
     DIR* dir;
@@ -240,7 +244,7 @@ string choice3()
         }
         closedir(dir);
     } else {
-        cout << "Unable to open './classes' directory." << endl;
+        cout << "\n\nUnable to open './classes' directory." << endl;
         mainpage();
         return "";
     }
@@ -248,7 +252,7 @@ string choice3()
     file.close();
 
     // Step 2: User selects a class folder
-    cout << "Select Class :  ";
+    cout << "\n\n\nSelect Class :  ";
     cin >> select;
 
     string storef;
@@ -266,7 +270,7 @@ string choice3()
         }
         File2.close();
     } else {
-        cout << "Error opening temp.txt" << endl;
+        cout << "\n\nError opening temp.txt" << endl;
         mainpage();
         return "";
     }
@@ -276,7 +280,7 @@ string choice3()
     DIR* subDir = opendir(folderPath.c_str());
 
     if (subDir == NULL) {
-        cout << "Unable to open folder: " << folderPath << endl;
+        cout << "\n\nUnable to open folder: " << folderPath << endl;
         mainpage();
         return "";
     }
@@ -284,137 +288,7 @@ string choice3()
     ofstream fileList("temp.txt", ios::out);  // Overwrite again with files
     i = 1;
 
-    cout << "\nFiles in " << storef << ":\n";
-
-    while ((ent = readdir(subDir)) != NULL) {
-        if (ent->d_type == DT_REG) { // Only list files
-            cout << i << ". " << ent->d_name << endl;
-            fileList << ent->d_name << endl;
-            i++;
-        }
-    }
-
-    fileList.close();
-    closedir(subDir);
-
-    // Step 4: User selects a file
-    cout << "Select Month : ";
-    cin >> select;
-
-    string filename;
-    ifstream File3("temp.txt", ios::in);
-    lineNumber = 0;
-
-    if (File3.is_open()) {
-        while (getline(File3, line)) {
-            lineNumber++;
-            if (lineNumber == select) {
-                filename = line;
-                break;
-            }
-        }
-        File3.close();
-    } else {
-        cout << "Error opening temp.txt" << endl;
-        mainpage();
-        return "";
-    }
-
-    // Final path to selected file
-    path = folderPath + "/" + filename;
-   
-
-
-// Print file content to terminal
-ifstream selectedFile(path);
-if (selectedFile.is_open()) {
-    string fileLine;
-    cout << "\n--- File Content ---\n";
-    while (getline(selectedFile, fileLine)) {
-        cout << fileLine << endl;
-    }
-    selectedFile.close();
-} else {
-    cout << "Error opening the selected file." << endl;
-}
-
-
-
-    cout << "\nSelected file path: " << path << endl;
-
-    return path;
-}
-
-
-
-
-string choice4()
-{
-    string path;
-    int select;
-
-    // Step 1: List all folders inside ./classes
-    DIR* dir;
-    struct dirent* ent;
-    dir = opendir("./classes");
-    int i = 1;
-    ofstream file("temp.txt", ios::out);
-
-    if (dir != NULL) {
-        while ((ent = readdir(dir)) != NULL) {
-            if (ent->d_type == DT_DIR && strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0) {
-                cout << i << ". " << ent->d_name << endl;
-                file << ent->d_name << endl;
-                i++;
-            }
-        }
-        closedir(dir);
-    } else {
-        cout << "Unable to open './classes' directory." << endl;
-        mainpage();
-        return "";
-    }
-
-    file.close();
-
-    // Step 2: User selects a class folder
-    cout << "Select Class :  ";
-    cin >> select;
-
-    string storef;
-    ifstream File2("temp.txt", ios::in);
-    string line;
-    int lineNumber = 0;
-
-    if (File2.is_open()) {
-        while (getline(File2, line)) {
-            lineNumber++;
-            if (lineNumber == select) {
-                storef = line;
-                break;
-            }
-        }
-        File2.close();
-    } else {
-        cout << "Error opening temp.txt" << endl;
-        mainpage();
-        return "";
-    }
-
-    // Step 3: List files inside ./classes/storef
-    string folderPath = "./classes/" + storef;
-    DIR* subDir = opendir(folderPath.c_str());
-
-    if (subDir == NULL) {
-        cout << "Unable to open folder: " << folderPath << endl;
-        mainpage();
-        return "";
-    }
-
-    ofstream fileList("temp.txt", ios::out);  // Overwrite again with files
-    i = 1;
-
-    cout << "\nMonths & Years: \n\n ";
+    cout << "\nSelect month & year" << ":\n\n\n";
 
     while ((ent = readdir(subDir)) != NULL) {
         if (ent->d_type == DT_REG) { // Only list files
@@ -445,39 +319,160 @@ string choice4()
         }
         File3.close();
     } else {
-        cout << "Error opening temp.txt" << endl;
+        cout << "\n\nError opening temp.txt" << endl;
         mainpage();
         return "";
     }
 
     // Final path to selected file
     path = folderPath + "/" + filename;
+   
+
+
+// Print file content to terminal
+ifstream selectedFile(path);
+if (selectedFile.is_open()) {
+    string fileLine;
+    cout << "\n--- ATTENDENCE ---\n";
+    while (getline(selectedFile, fileLine)) {
+        cout << fileLine << endl;
+    }
+    selectedFile.close();
+    mainpage();
+} else {
+    cout << "\n\nError opening the selected file." << endl;
+}
+
+
+
+    
+
+    return path;
+}
+
+
+
+
+string choice4()
+{
+    string path;
+    int select;
+    cout<<endl;
+
+    // Step 1: List all folders inside ./classes
+    DIR* dir;
+    struct dirent* ent;
+    dir = opendir("./classes");
+    int i = 1;
+    ofstream file("temp.txt", ios::out);
+
+    if (dir != NULL) {
+        while ((ent = readdir(dir)) != NULL) {
+            if (ent->d_type == DT_DIR && strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0) {
+                cout << i << ". " << ent->d_name << endl;
+                file << ent->d_name << endl;
+                i++;
+            }
+        }
+        closedir(dir);
+    } else {
+        cout << "\n\nUnable to open './classes' directory." << endl;
+        mainpage();
+        return "";
+    }
+
+    file.close();
+
+    // Step 2: User selects a class folder
+    cout << "\nSelect Class :  ";
+    cin >> select;
+
+    string storef;
+    ifstream File2("temp.txt", ios::in);
+    string line;
+    int lineNumber = 0;
+
+    if (File2.is_open()) {
+        while (getline(File2, line)) {
+            lineNumber++;
+            if (lineNumber == select) {
+                storef = line;
+                break;
+            }
+        }
+        File2.close();
+    } else {
+        cout << "\n\nError opening temp.txt" << endl;
+        mainpage();
+        return "";
+    }
+
+    // Step 3: List files inside ./classes/storef
+    string folderPath = "./classes/" + storef;
+    DIR* subDir = opendir(folderPath.c_str());
+
+    if (subDir == NULL) {
+        cout << "\n\nUnable to open folder: " << folderPath << endl;
+        mainpage();
+        return "";
+    }
+
+    ofstream fileList("temp.txt", ios::out);  // Overwrite again with files
+    i = 1;
+
+    cout << "\n\nMonths & Years: \n\n ";
+
+    while ((ent = readdir(subDir)) != NULL) {
+        if (ent->d_type == DT_REG) { // Only list files
+            cout << i << ". " << ent->d_name << endl;
+            fileList << ent->d_name << endl;
+            i++;
+        }
+    }
+
+    fileList.close();
+    closedir(subDir);
+
+    // Step 4: User selects a file
+    cout << "\n\nSelect Month : ";
+    cin >> select;
+
+    string filename;
+    ifstream File3("temp.txt", ios::in);
+    lineNumber = 0;
+
+    if (File3.is_open()) {
+        while (getline(File3, line)) {
+            lineNumber++;
+            if (lineNumber == select) {
+                filename = line;
+                break;
+            }
+        }
+        File3.close();
+    } else {
+        cout << "\n\nError opening temp.txt" << endl;
+        mainpage();
+        
+    }
+
+    // Final path to selected file
+    path = folderPath + "/" + filename;
     
     int check = checkstudent(path); 
-    if (check == 1) {
-        cout << "\nPress Y for go to Main Screen / Press another button to check again" << endl;
-        string choice;
-        cin >> choice;
-        if (choice == "Y" || choice == "y") {
-            mainpage();
-        } else {
-            
-            checkstudent(path);
-        }
-    } else {
-        cout << "Something went wrong" << endl;
-        mainpage();
-    }
 
     
     
+    
 }
+
+
 
 int checkstudent(string path){
     ifstream showName(path);
     string tempLine;
     int current = 0;
-    cout << "Students:\n";
+    cout << "\n\nStudents:\n";
     while (getline(showName, tempLine))
     {
         current++;
@@ -489,7 +484,7 @@ int checkstudent(string path){
     cout << endl;
 
     // Ask for student selection
-    cout << "Select student : ";
+    cout << "\n\nSelect student : ";
     int select1;
     cin >> select1;
     select1 -= 1; // Adjust for header line
@@ -515,8 +510,9 @@ int checkstudent(string path){
         if (currentLine == select1 + 1) {
             if (lineRead.length() > dateIndex) {
                 cout << "Attendance on Date " << date << ": " << lineRead[dateIndex] << endl;
+                
             } else {
-                cout << "Data not available for that date." << endl;
+                cout << "\n\n\nData not available for that date." << endl;
             }
             break;
         }
@@ -524,6 +520,16 @@ int checkstudent(string path){
     }
 
     file_show.close();
+    cout << "\n\nPress Y for go to Main Screen / Press another button to check again" << endl;
+    string choice;
+    cin >> choice;
+
+    if (choice == "Y" || choice == "y") {
+        mainpage();
+    } else {
+        checkstudent(path);
+    }
+    cout << "\n\nPress Y for go to Main Screen / Press another button to check again" << endl;
     return 1;
 
 }
@@ -531,7 +537,7 @@ int checkstudent(string path){
 string choice5()
 {
 
-    cout << "1. Add Student" << endl;
+    cout << "\n\n1. Add Student" << endl;
     cout << "2. Remove Student" << endl;
     cout << "3. Go to Main Screen" << endl;
     cout << "Select your choice: ";
@@ -541,7 +547,7 @@ string choice5()
     if (cin.fail()) {
         cin.clear(); 
         cin.ignore(10000, '\n'); 
-        cout << "Invalid input! Please enter a number.\n" << endl;
+        cout << "\n\n\nInvalid input! Please enter a number.\n" << endl;
         return choice5();
     }
 
@@ -556,7 +562,7 @@ string choice5()
             mainpage();
             break;
         default:
-            cout << "Invalid choice!" << endl;
+            cout << "\n\nInvalid choice!" << endl;
             choice5();
             break;
     }
@@ -587,7 +593,7 @@ string addname()
         }
         closedir(dir);
     } else {
-        cout << "Unable to open './classes' directory." << endl;
+        cout << "\n\n\nnUnable to open './classes' directory." << endl;
         mainpage();
         
     }
@@ -595,7 +601,7 @@ string addname()
     file.close();
 
     // Step 2: User selects a class folder
-    cout << "Select Class :  ";
+    cout << "\n\n\nSelect Class :  ";
     cin >> select;
 
     string storef;
@@ -613,7 +619,7 @@ string addname()
         }
         File2.close();
     } else {
-        cout << "Error opening temp.txt" << endl;
+        cout << "\n\nSomething went Wrong" << endl;
         mainpage();
        
     }
@@ -655,8 +661,8 @@ string addname()
     }
     file1<<currentLine - 1 << ". " << student_name << endl;
     file1.close();
-    cout << "Student added successfully!" << endl;
-    cout << "Press Y for go to Main Screen / Press another button to add again" << endl;
+    cout << "\n\nStudent added successfully!" << endl;
+    cout << "\n\nPress Y for go to Main Screen / Press another button to add again" << endl;
     string choice;
     cin >> choice;
     if (choice == "Y" || choice == "y") {
@@ -691,7 +697,7 @@ string removeName()
         }
         closedir(dir);
     } else {
-        cout << "Unable to open './classes' directory." << endl;
+        cout << "\n\nUnable to open './classes' directory." << endl;
         mainpage();
         return "";
     }
@@ -699,7 +705,7 @@ string removeName()
     file.close();
 
     // Step 2: User selects a class folder
-    cout << "Select Class :  ";
+    cout << "\n\nSelect Class :  ";
     cin >> select;
 
     string storef;
@@ -717,7 +723,7 @@ string removeName()
         }
         File2.close();
     } else {
-        cout << "Error opening temp.txt" << endl;
+        cout << "\n\nError opening temp.txt" << endl;
         mainpage();
         return "";
     }
@@ -739,7 +745,7 @@ string removeName()
     if (repeat == 1) {
         
     
-    cout << "Press Y for remove again / Press another button to main menu : " << endl;
+    cout << "\n\nPress Y for remove again / Press another button to main menu : " << endl;
     string choice;
     cin >> choice;
     if (choice == "Y" || choice == "y") {
@@ -757,7 +763,7 @@ int removestd(string path){
     int current = 0;
     vector<string> allLines;
 
-    cout << "Students:\n";
+    cout << "\n\nStudents:\n";
     while (getline(showName, tempLine)) {
         allLines.push_back(tempLine);
         current++;
@@ -769,7 +775,7 @@ int removestd(string path){
     cout << endl;
 
     // Step 5: Ask for student selection
-    cout << "Select student to remove: ";
+    cout << "\n\nSelect student to remove: ";
     int select1;
     cin >> select1;
     
@@ -784,7 +790,7 @@ int removestd(string path){
         }
     }
     outFile.close();
-    cout << "\nStudent removed successfully!\n";
+    cout << "\n\nStudent removed successfully!\n";
     return 1;
 
 }
@@ -838,7 +844,7 @@ string autocreatefile(string filename)
         // Try to open previous month file
         ifstream file_copy(prev_file);
         if (!file_copy.is_open()) {
-            cout << "Maybe you forget to create class" << endl;
+            cout << "" << endl;
         } else {
             string line;
             int currentLine = 0;
@@ -857,7 +863,7 @@ string autocreatefile(string filename)
         }
 
         file_check.close();
-        cout << "File created because it did not exist." << endl;
+        cout << "" << endl;
     }
 
     return file_path;
@@ -920,13 +926,13 @@ int studentname(string filename , string class_name)
     
     ofstream file1(global_file_path, ios::app);
     if (!file1) {
-        cout << "Error opening file!" << endl;
+        cout << "\n\nError opening file!" << endl;
         return 1;
     }
    
     int i = 1;
     
-    cout<<"\nEnter Student Name (or type 'exit' to finish): \n";
+    cout<<"\nEnter Student Name (or type 'exit' to finish): \n\n";
 
     cout<<"\n";
     while(true)
@@ -950,7 +956,7 @@ int studentname(string filename , string class_name)
 
 
 int mainpage(){
-    cout << "Welcome to Attendance Management System" << endl;
+    cout << "\n\n\nWelcome to Attendance Management System" << endl;
     cout << "Please Enter Choice :" << endl;
     cout << "1. Take Attendance" << endl;
     cout << "2. Add Class" << endl;
@@ -961,13 +967,13 @@ int mainpage(){
 
     
     int choice = 0;
-    cout << "Select your choice: ";
+    cout << "\nSelect your choice: ";
     cin >> choice;
 
     if (cin.fail()) {
         cin.clear(); 
         cin.ignore(10000, '\n'); 
-        cout << "Invalid input! Please enter a number.\n" << endl;
+        cout << "\n\nInvalid input! Please enter a number.\n" << endl;
         return mainpage(); 
     }
     switch (choice) 
@@ -988,10 +994,11 @@ int mainpage(){
             choice5();
             break;
         case 6:
-            cout << "Exiting..." << endl;
+            cout <<endl<<endl<< "\n\nExiting..." << endl<<endl;
+            return 0;
          break;
         default:
-            cout << "Invalid choice!" << endl;
+            cout << "\n\nInvalid choice!" << endl;
             break;
     }
 
