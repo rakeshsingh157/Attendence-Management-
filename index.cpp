@@ -27,7 +27,7 @@ string choice5();
 string addname();
 string removeName();
 int removestd(string path);
-int recall(string path, int check = 0);
+int checkstudent(string path);
 
 string global_file_path;
 string path;
