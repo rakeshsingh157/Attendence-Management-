@@ -9,6 +9,8 @@
 #include <cstring>  
 #include <sstream>  
 #include <vector>
+#include <algorithm>
+
 
 
 using namespace std;
@@ -917,6 +919,7 @@ int monthdays(){
 }
 
 
+
 int studentname(string filename, string class_name) {
     string student_name;
     string ch;
@@ -932,6 +935,9 @@ int studentname(string filename, string class_name) {
     while (true) {
         cout << "Enter Student " << i << ": ";
         getline(cin, student_name);
+        // Remove leading and trailing spaces
+        student_name.erase(0, student_name.find_first_not_of(' '));
+        student_name.erase(student_name.find_last_not_of(' ') + 1);
         if (student_name == "exit") {
             mainpage();
             break;
@@ -940,11 +946,17 @@ int studentname(string filename, string class_name) {
             cout << "Please enter a valid name." << endl;
             continue;
         }
+        if (any_of(student_name.begin(), student_name.end(), ::isdigit)) {
+            cout << "Name cannot contain numbers." << endl;
+            continue;
+        }
         file1 << i << ". " << student_name << endl;
         i++;
     }
     file1.close();
 }
+
+
 
 
 
