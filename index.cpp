@@ -48,7 +48,6 @@ bool folderExists(const string& folderName) {
 
 
 
-
 int choice1()
  {
     string path;
@@ -215,7 +214,6 @@ int choice2() {
     else{
         cout << "\n\nClass already exists!" << endl;
         autocreatefile(class_name);
-        cout<<"\n\nPress Y for go to Main Screen"<<endl;
         choice2();
 
        }
@@ -919,39 +917,35 @@ int monthdays(){
 }
 
 
-int studentname(string filename , string class_name)
-{
+int studentname(string filename, string class_name) {
     string student_name;
     string ch;
     int day = monthdays();
-    
     ofstream file1(global_file_path, ios::app);
     if (!file1) {
         cout << "\n\nError opening file!" << endl;
         return 1;
     }
-   
     int i = 1;
-    
-    cout<<"\nEnter Student Name (or type 'exit' to finish): \n\n";
-
-    cout<<"\n";
-    while(true)
-    {
-        cout<<"Enter Student "<<i<<": ";
+    cout << "\nEnter Student Name (or type 'exit' to finish): \n\n";
+    cout << "\n";
+    while (true) {
+        cout << "Enter Student " << i << ": ";
         getline(cin, student_name);
-
-        if (student_name == "exit") 
-        {
+        if (student_name == "exit") {
             mainpage();
             break;
         }
-
-        file1<<i<<". "<<student_name<<endl;
+        if (student_name.find_first_not_of(' ') == string::npos || student_name.empty()) {
+            cout << "Please enter a valid name." << endl;
+            continue;
+        }
+        file1 << i << ". " << student_name << endl;
         i++;
     }
-    
+    file1.close();
 }
+
 
 
 
@@ -1010,9 +1004,6 @@ int mainpage(){
 
 int main() 
 {
-    
     mainpage();
-
-
     return 0;
 }
